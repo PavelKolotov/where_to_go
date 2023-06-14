@@ -1,15 +1,7 @@
-import json
-from django.http import HttpResponse, JsonResponse
-from django.template import loader
+from django.http import JsonResponse
+from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
-from places.models import Place, Image
-
-
-# def show_start_page(request):
-#     template = loader.get_template('index.html')
-#     context = {}
-#     rendered_page = template.render(context, request)
-#     return HttpResponse(rendered_page)
+from places.models import Place
 
 
 def get_geo_json(request):
@@ -19,9 +11,6 @@ def get_geo_json(request):
         "features": []
     }
     for place in places:
-        imgs = []
-        for image in place.images.all():
-            imgs.append(str(image.image))
         features = {
             "type": "Feature",
             "geometry": {
@@ -31,17 +20,7 @@ def get_geo_json(request):
             "properties": {
                 "title": place.title,
                 "placeId": place.id,
-                "detailsUrl": 'static/places/moscow_legends.json',
-                # "detailsUrl": {
-                #     "title": place.title,
-                #     "imgs": imgs,
-                #     "description_short": place.description_short,
-                #     "description_long": place.description_long,
-                #         "coordinates": {
-                #         "lng": place.coordinate_lng,
-                #         "lat": place.coordinate_lat
-                #     }
-                # }
+                "detailsUrl": reverse('place_name', args=(place.id, )),
             }
         }
         geo_json['features'].append(features)
@@ -66,6 +45,5 @@ def get_place(request, place_id):
             "lat": place.coordinate_lat
         }
     }
-
     return JsonResponse(place_context, json_dumps_params={'ensure_ascii': False, 'indent': 4})
 
