@@ -9,12 +9,19 @@ class Place(models.Model):
     coordinate_lat = models.FloatField('Широта', null=True)
 
     def __str__(self):
-        return f'{self.id} {self.title}'
+        return self.title
 
 
 class Image(models.Model):
     place = models.ForeignKey(Place, related_name='images', on_delete=models.CASCADE)
     image = models.ImageField('Картинка', upload_to='media')
+    order = models.PositiveIntegerField('Порядок', default=0)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'Картинка'
+        verbose_name_plural = 'Картинки'
 
     def __str__(self):
         return f'{self.id} {self.place}'
+
