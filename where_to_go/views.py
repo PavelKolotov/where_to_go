@@ -1,5 +1,5 @@
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.shortcuts import render, get_object_or_404
 from places.models import Place, Image
@@ -55,7 +55,7 @@ def get_place(request, place_id):
     imgs = []
     place = get_object_or_404(Place, pk=place_id)
     for image in place.images.all():
-        imgs.append(str(image.image))
+        imgs.append(image.image.url)
     place_context = {
         "title": place.title,
         "imgs": imgs,
@@ -67,4 +67,5 @@ def get_place(request, place_id):
         }
     }
 
-    return HttpResponse(place_context["title"])
+    return JsonResponse(place_context, json_dumps_params={'ensure_ascii': False, 'indent': 4})
+
