@@ -1,7 +1,7 @@
 import json
 from django.http import HttpResponse
 from django.template import loader
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from places.models import Place, Image
 
 
@@ -51,3 +51,20 @@ def get_geo_json(request):
     return render(request, "index.html", context=places_geo_json)
 
 
+def get_place(request, place_id):
+    imgs = []
+    place = get_object_or_404(Place, pk=place_id)
+    for image in place.images.all():
+        imgs.append(str(image.image))
+    place_context = {
+        "title": place.title,
+        "imgs": imgs,
+        "description_short": place.description_short,
+        "description_long": place.description_long,
+        "coordinates": {
+            "lng": place.coordinate_lng,
+            "lat": place.coordinate_lat
+        }
+    }
+
+    return HttpResponse(place_context["title"])
