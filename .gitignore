@@ -155,6 +155,7 @@ cython_debug/
 test.py
 test1.py
 media
+static/places
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
