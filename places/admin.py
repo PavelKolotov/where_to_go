@@ -1,12 +1,15 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from .models import Place, Image
+from adminsortable2.admin import SortableAdminBase, SortableStackedInline
 
 
-class ImageInline(admin.TabularInline):
+
+class ImageInline(SortableStackedInline):
     model = Image
     readonly_fields = ['preview', ]
-    fields = ('image', 'preview', 'order')
+    extra = 1
+
 
     def preview(self, obj):
         return mark_safe('<img src="{url}" height={height} />'.format(
@@ -16,10 +19,13 @@ class ImageInline(admin.TabularInline):
 
 
 @admin.register(Place)
-class PlaceAdmin(admin.ModelAdmin):
+class PlaceAdmin(SortableAdminBase, admin.ModelAdmin):
     inlines = [ImageInline, ]
 
 
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    pass
 
 
 
