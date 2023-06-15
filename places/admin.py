@@ -4,12 +4,10 @@ from .models import Place, Image
 from adminsortable2.admin import SortableAdminBase, SortableStackedInline
 
 
-
 class ImageInline(SortableStackedInline):
     model = Image
     readonly_fields = ['preview', ]
     extra = 1
-
 
     def preview(self, obj):
         return mark_safe('<img src="{url}" height={height} />'.format(

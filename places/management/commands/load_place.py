@@ -8,7 +8,6 @@ from django.core.files.base import ContentFile
 from places.models import Place, Image
 
 
-
 class Command(BaseCommand):
     help = 'Добавляет экскурсионные места из json файлов'
 
