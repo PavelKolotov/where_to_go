@@ -50,7 +50,7 @@ pip install -r requirements.txt
 Реализована возможность заполнения контента из готовых экскурсионных мест. Для этого перейдите по [данной ссылке](https://github.com/devmanorg/where-to-go-places/tree/master/places)
 Затем запустите:
 
-```python manage.py load_place адрес_файла_json```
+```python manage.py load_place http://адрес/файла.json```
 
 Структура файла json:
 
