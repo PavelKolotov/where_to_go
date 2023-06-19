@@ -9,9 +9,9 @@ class ImageInline(SortableStackedInline):
     readonly_fields = ['preview', ]
     extra = 1
 
-    def preview(self, obj):
+    def preview(self, image_obj):
         return mark_safe('<img src="{url}" height={height} />'.format(
-            url=obj.image.url,
+            url=image_obj.image.url,
             height=200, )
         )
 
