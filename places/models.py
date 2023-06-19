@@ -9,12 +9,12 @@ class Place(models.Model):
     coordinate_lng = models.FloatField('Долгота')
     coordinate_lat = models.FloatField('Широта')
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         verbose_name = 'Место'
         verbose_name_plural = 'Места'
+
+    def __str__(self):
+        return self.title
 
 
 class Image(models.Model):
