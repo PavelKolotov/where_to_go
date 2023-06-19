@@ -6,28 +6,28 @@ from places.models import Place
 
 def get_index_page(request):
     places = Place.objects.all()
-    geodata = {
-        "type": "FeatureCollection",
-        "features": []
-    }
+    features = []
     for place in places:
-        features = {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [place.coordinate_lng, place.coordinate_lat]
+        features.append({
+            'type': 'Feature',
+            'geometry': {
+                'type': 'Point',
+                'coordinates': [place.coordinate_lng, place.coordinate_lat]
             },
-            "properties": {
-                "title": place.title,
-                "placeId": place.id,
-                "detailsUrl": reverse('place_name', args=(place.id, )),
+            'properties': {
+                'title': place.title,
+                'placeId': place.id,
+                'detailsUrl': reverse('place_name', args=(place.id, )),
             }
-        }
-        geodata['features'].append(features)
+        })
+
     context = {
-        'places': geodata
+        'places': {
+            'type': 'FeatureCollection',
+            'features': features
+        }
     }
-    return render(request, "index.html", context=context)
+    return render(request, 'index.html', context=context)
 
 
 def get_place(request, place_id):
@@ -36,13 +36,13 @@ def get_place(request, place_id):
     for image in place.images.all():
         imgs.append(image.image.url)
     place_context = {
-        "title": place.title,
-        "imgs": imgs,
-        "description_short": place.description_short,
-        "description_long": place.description_long,
-        "coordinates": {
-            "lng": place.coordinate_lng,
-            "lat": place.coordinate_lat
+        'title': place.title,
+        'imgs': imgs,
+        'description_short': place.description_short,
+        'description_long': place.description_long,
+        'coordinates': {
+            'lng': place.coordinate_lng,
+            'lat': place.coordinate_lat
         }
     }
     return JsonResponse(place_context, json_dumps_params={'ensure_ascii': False, 'indent': 4})
