@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from .models import Place, Image
 from adminsortable2.admin import SortableAdminBase, SortableStackedInline
@@ -18,9 +17,3 @@ class ImageInline(SortableStackedInline):
 class PlaceAdmin(SortableAdminBase, admin.ModelAdmin):
     inlines = [ImageInline, ]
     search_fields = ['title']
-
-
-
-
-
-

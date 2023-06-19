@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from places.models import Place
 
 
-def get_geo_json(request):
+def get_index_page(request):
     places = Place.objects.all()
     geo_json = {
         "type": "FeatureCollection",
@@ -46,4 +46,3 @@ def get_place(request, place_id):
         }
     }
     return JsonResponse(place_context, json_dumps_params={'ensure_ascii': False, 'indent': 4})
-

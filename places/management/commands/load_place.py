@@ -41,5 +41,3 @@ class Command(BaseCommand):
             place=obj,
             image=ContentFile(response.content, name=filename)
         )
-
-
