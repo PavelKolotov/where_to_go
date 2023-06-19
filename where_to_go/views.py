@@ -6,7 +6,7 @@ from places.models import Place
 
 def get_index_page(request):
     places = Place.objects.all()
-    geo_json = {
+    geodata = {
         "type": "FeatureCollection",
         "features": []
     }
@@ -23,11 +23,11 @@ def get_index_page(request):
                 "detailsUrl": reverse('place_name', args=(place.id, )),
             }
         }
-        geo_json['features'].append(features)
-    places_geo_json = {
-        'places': geo_json
+        geodata['features'].append(features)
+    context = {
+        'places': geodata
     }
-    return render(request, "index.html", context=places_geo_json)
+    return render(request, "index.html", context=context)
 
 
 def get_place(request, place_id):
