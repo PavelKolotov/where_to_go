@@ -31,10 +31,8 @@ def get_index_page(request):
 
 
 def get_place(request, place_id):
-    imgs = []
     place = get_object_or_404(Place, pk=place_id)
-    for image in place.images.all():
-        imgs.append(image.image.url)
+    imgs = [image.image.url for image in place.images.all()]
     place_context = {
         'title': place.title,
         'imgs': imgs,
