@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 from .models import Place, Image
 from adminsortable2.admin import SortableAdminBase, SortableStackedInline
 
@@ -10,10 +11,7 @@ class ImageInline(SortableStackedInline):
     extra = 1
 
     def preview(self, image_obj):
-        return mark_safe('<img src="{url}" height={height} />'.format(
-            url=image_obj.image.url,
-            height=200, )
-        )
+        return format_html('<img src={} height={height}>', image_obj.image.url, height=200)
 
 
 @admin.register(Place)
