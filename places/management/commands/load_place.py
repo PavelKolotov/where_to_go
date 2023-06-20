@@ -17,19 +17,21 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         place = kwargs['place']
         response = requests.get(place)
-        place_data = response.json()
+        response.raise_for_status()
+
+        place_payload = response.json()
         try:
-            Place.objects.get(title=place_data['title'])
+            Place.objects.get(title=place_payload['title'])
         except Place.DoesNotExist:
             obj, created = Place.objects.get_or_create(
-                title=place_data['title'],
-                description_short=place_data['description_short'],
-                description_long=place_data['description_long'],
-                coordinate_lng=place_data['coordinates']['lng'],
-                coordinate_lat=place_data['coordinates']['lat']
+                title=place_payload['title'],
+                description_short=place_payload['description_short'],
+                description_long=place_payload['description_long'],
+                coordinate_lng=place_payload['coordinates']['lng'],
+                coordinate_lat=place_payload['coordinates']['lat']
             )
 
-            for image_url in place_data['imgs']:
+            for image_url in place_payload['imgs']:
                 self.download_img(image_url, obj)
 
     def download_img(self, image_url, obj):
