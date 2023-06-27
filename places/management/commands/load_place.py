@@ -26,11 +26,12 @@ class Command(BaseCommand):
             coordinate_lng=place_payload['coordinates']['lng'],
             coordinate_lat=place_payload['coordinates']['lat'],
             defaults= {
-                'description_short': place_payload['description_short'],
-                'description_long': place_payload['description_long'],}
+                'description_short': place_payload.get('description_short', ''),
+                'description_long': place_payload.get('description_long', ''),
+            }
         )
 
-        for image_url in place_payload['imgs']:
+        for image_url in place_payload.get('imgs', []):
             self.download_img(image_url, place_obj)
 
     def download_img(self, image_url, place_obj):
