@@ -20,26 +20,25 @@ class Command(BaseCommand):
         response.raise_for_status()
 
         place_payload = response.json()
-        try:
-            Place.objects.get(title=place_payload['title'])
-        except Place.DoesNotExist:
-            obj, created = Place.objects.get_or_create(
-                title=place_payload['title'],
-                description_short=place_payload['description_short'],
-                description_long=place_payload['description_long'],
-                coordinate_lng=place_payload['coordinates']['lng'],
-                coordinate_lat=place_payload['coordinates']['lat']
-            )
 
-            for image_url in place_payload['imgs']:
-                self.download_img(image_url, obj)
+        place_obj, created = Place.objects.get_or_create(
+            title=place_payload['title'],
+            coordinate_lng=place_payload['coordinates']['lng'],
+            coordinate_lat=place_payload['coordinates']['lat'],
+            defaults= {
+                'description_short': place_payload['description_short'],
+                'description_long': place_payload['description_long'],}
+        )
 
-    def download_img(self, image_url, obj):
+        for image_url in place_payload['imgs']:
+            self.download_img(image_url, place_obj)
+
+    def download_img(self, image_url, place_obj):
         response = requests.get(image_url)
         response.raise_for_status()
 
         filename = Path(urlparse(image_url).path).name
         Image.objects.create(
-            place=obj,
+            place=place_obj,
             image=ContentFile(response.content, name=filename)
         )
