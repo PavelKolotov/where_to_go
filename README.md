@@ -27,7 +27,7 @@ pip install -r requirements.txt
 - `ALLOWED_HOSTS` — список хостов: 
   - `127.0.0.1` для development
   - `доменное имя` для production
-- `PROJECT_ROOT` - путь для размещения статики при выполнении команды collectstatic
+- `STATIC_ROOT` - путь для размещения статики при выполнении команды collectstatic
 
 
 ## Запуск локального сервера

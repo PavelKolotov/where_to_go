@@ -15,8 +15,8 @@ class Command(BaseCommand):
         parser.add_argument('place', type=str, help='Введите путь к файлу с данными')
 
     def handle(self, *args, **kwargs):
-        place = kwargs['place']
-        response = requests.get(place)
+        place_url = kwargs['place']
+        response = requests.get(place_url)
         response.raise_for_status()
 
         place_payload = response.json()
@@ -25,14 +25,14 @@ class Command(BaseCommand):
             title=place_payload['title'],
             coordinate_lng=place_payload['coordinates']['lng'],
             coordinate_lat=place_payload['coordinates']['lat'],
-            defaults= {
+            defaults={
                 'description_short': place_payload.get('description_short', ''),
                 'description_long': place_payload.get('description_long', ''),
             }
         )
-
-        for image_url in place_payload.get('imgs', []):
-            self.download_img(image_url, place_obj)
+        if created:
+            for image_url in place_payload.get('imgs', []):
+                self.download_img(image_url, place_obj)
 
     def download_img(self, image_url, place_obj):
         response = requests.get(image_url)
