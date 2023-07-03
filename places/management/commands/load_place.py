@@ -30,9 +30,11 @@ class Command(BaseCommand):
                 'description_long': place_payload.get('description_long', ''),
             }
         )
-        if created:
-            for image_url in place_payload.get('imgs', []):
-                self.download_img(image_url, place_obj)
+        if not created:
+            return
+
+        for image_url in place_payload.get('imgs', []):
+            self.download_img(image_url, place_obj)
 
     def download_img(self, image_url, place_obj):
         response = requests.get(image_url)
